@@ -58,6 +58,7 @@ function Game({ playerColor, onReset }: GameProps) {
   }, []);
 
   const makeBotMove = useCallback(async () => {
+    addThinkingLog('正在分析棋盘信息...')
     const currentBoard = formatBoard(board);
     const [i, j, msg] = await botMove(currentPlayer, currentBoard);
     if(msg) {
@@ -70,6 +71,7 @@ function Game({ playerColor, onReset }: GameProps) {
     if (checkWinner(i, j, currentPlayer, newBoard)) {
       setWinner(currentPlayer);
     } else {
+      addThinkingLog("等待玩家移动...");
       setCurrentPlayer(currentPlayer === 'black' ? 'white' : 'black');
     }
     return;
@@ -157,13 +159,13 @@ function Game({ playerColor, onReset }: GameProps) {
           <Brain className="text-gray-600" size={20} />
           <h2 className="text-lg font-semibold">Bot's Thinking Log</h2>
         </div>
-        <div className="h-[500px] overflow-y-auto">
+        <div className="h-[800px] overflow-y-auto">
           {thinkingLogs.length === 0 ? (
             <p className="text-gray-500 text-center italic">No thoughts yet...</p>
           ) : (
             <div className="space-y-3">
               {thinkingLogs.map((log, index) => (
-                <div key={log.timestamp} className="p-3 bg-gray-50 rounded-lg">
+                <div key={index} className="p-3 bg-gray-50 rounded-lg">
                   <p className="text-sm text-gray-800">{log.message}</p>
                   <p className="text-xs text-gray-500 mt-1">
                     {new Date(log.timestamp).toLocaleTimeString()}
