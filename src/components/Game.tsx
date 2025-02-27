@@ -1,11 +1,11 @@
 'use client';
 
+import React, { useState, useCallback, useEffect } from "react";
 import { BoardState, Player, ThinkingLog } from "@/types";
 import { formatBoard, parseBotPosition } from "@/utils/board";
 import { useChat } from "@ai-sdk/react";
 import { Message } from "ai";
 import { RefreshCcw, Brain } from "lucide-react";
-import React, { useState, useCallback, useEffect } from "react";
 
 interface GameProps {
     playerColor: Player;
@@ -16,7 +16,8 @@ const boardSize = 15;
 const winCount = 5;
 
 export default function Game({ playerColor, onReset }: GameProps) {
-    const [board, setBoard] = useState<BoardState>(Array(boardSize).fill(null).map(() => Array(boardSize).fill(null)));
+    const initializeBoard = () => Array(boardSize).fill(null).map(() => Array(boardSize).fill(null));
+    const [board, setBoard] = useState<BoardState>(initializeBoard);
     const [currentPlayer, setCurrentPlayer] = useState<Player>('black');
     const [winner, setWinner] = useState<Player | null>(null);
     const [moveEvent, setMoveEvent] = useState<[number, number, Player] | null>(null);
